@@ -11,7 +11,7 @@
             "name": "Chrome: Launch localhost with sourcemaps",
             "type": "chrome",
             "request": "launch",
-            "url": "http://localhost/mypage.html",
+            "url": "http://localhost/index.html",
             "webRoot": "./app/files",
             "sourceMaps": true
         },

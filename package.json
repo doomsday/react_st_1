@@ -4,9 +4,21 @@
   "description": "No description",
   "main": "index.html",
   "devDependencies": {
+    "babel-cli": "^6.6.5",
+    "babel-env": "^1.1.0",
+    "babel-plugin-syntax-jsx": "^6.5.0",
+    "babel-plugin-transform-react-jsx": "^6.6.5",
+    "babel-preset-react": "^6.5.0",
+    "babel-register": "^6.7.2",
+    "babelify": "^7.2.0",
     "express": "^4.13.4",
     "react": "^0.14.7",
-    "react-dom": "^0.14.7"
+    "react-dom": "^0.14.7",
+    "watchify": "^3.7.0"
+  },
+  "scripts": {
+    "build-js": "browserify static/jsx/app.jsx -o static/js/app.js",
+    "watch-js": "watchify static/jsx/app.jsx -t babelify -o static/js/app.js"
   },
   "license": "MIT"
 }
