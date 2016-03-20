@@ -19031,14 +19031,41 @@ module.exports = validateDOMNesting;
 module.exports = require('./lib/React');
 
 },{"./lib/React":53}],159:[function(require,module,exports){
-'use strict';
-
 var ReactDOM = require('react-dom');
 var React = require('react');
-ReactDOM.render(React.createElement(
-    'h1',
-    null,
-    'Hello, world!'
-), document.getElementById('root'));
+
+var Comments = React.createClass({
+    render: function () {
+        return React.createElement(
+            'div',
+            { className: 'comments' },
+            'There is no comments unfortunately'
+        );
+    }
+});
+
+var News = React.createClass({
+    render: function () {
+        return React.createElement(
+            'div',
+            { className: 'news' },
+            'There is no news unfortunately',
+            React.createElement(Comments, null)
+        );
+    }
+});
+
+var App = React.createClass({
+    render: function () {
+        return React.createElement(
+            'div',
+            { className: 'app' },
+            'Hello, I am App component!I can display some news.',
+            React.createElement(News, null)
+        );
+    }
+});
+
+ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
 
 },{"react":158,"react-dom":29}]},{},[159]);

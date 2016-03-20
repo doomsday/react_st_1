@@ -17,7 +17,7 @@
     "watchify": "^3.7.0"
   },
   "scripts": {
-    "build-js": "browserify static/jsx/app.jsx -o static/js/app.js",
+    "build-js": "browserify static/jsx/app.jsx -t babelify -o static/js/app.js",
     "watch-js": "watchify static/jsx/app.jsx -t babelify -o static/js/app.js"
   },
   "license": "MIT"
