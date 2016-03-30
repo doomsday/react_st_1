@@ -19031,41 +19031,85 @@ module.exports = validateDOMNesting;
 module.exports = require('./lib/React');
 
 },{"./lib/React":53}],159:[function(require,module,exports){
-var ReactDOM = require('react-dom');
-var React = require('react');
+"use strict";
 
-var Comments = React.createClass({
-    render: function () {
-        return React.createElement(
-            'div',
-            { className: 'comments' },
-            'There is no comments unfortunately'
-        );
-    }
-});
+var ReactDOM = require("react-dom");
+var React = require("react");
+
+var my_news = [{
+    author: "Саша Печкин",
+    text: "В четчерг, четвертого числа..."
+}, {
+    author: "Просто	Вася",
+    text: "Считаю, что $ должен стоить 35 рублей!"
+}, {
+    author: "Гость",
+    text: "Бесплатно. Скачать. Лучший сайт - http://localhost:3000"
+}, {
+    author: "Килла",
+    text: "Сейчас бы в борт не пробить"
+}];
 
 var News = React.createClass({
-    render: function () {
+    displayName: "News",
+
+    render: function render() {
+        var data = this.props.data;
+        var newsTemplate;
+        if (data.length > 0) {
+            newsTemplate = data.map(function (item, index) {
+                return React.createElement(
+                    "div",
+                    { key: index },
+                    React.createElement(
+                        "p",
+                        { className: "news_author" },
+                        item.author,
+                        ": "
+                    ),
+                    React.createElement(
+                        "p",
+                        { className: "news_text" },
+                        item.text
+                    )
+                );
+            });
+        } else {
+            newsTemplate = React.createElement(
+                "p",
+                null,
+                "There is no news, unfortunately"
+            );
+        }
+
         return React.createElement(
-            'div',
-            { className: 'news' },
-            'There is no news unfortunately',
-            React.createElement(Comments, null)
+            "div",
+            { className: "news" },
+            newsTemplate,
+            React.createElement(
+                "strong",
+                { className: data.length > 0 ? '' : 'none' },
+                "News total: ",
+                data.length
+            )
         );
     }
 });
 
 var App = React.createClass({
-    render: function () {
+    displayName: "App",
+
+    render: function render() {
         return React.createElement(
-            'div',
-            { className: 'app' },
-            'Hello, I am App component!I can display some news.',
-            React.createElement(News, null)
+            "div",
+            { className: "app" },
+            "Hello, I am App component!I can display some news!.",
+            React.createElement(News, { data: my_news }),
+            " "
         );
     }
 });
 
-ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
+ReactDOM.render(React.createElement(App, null), document.getElementById("root"));
 
 },{"react":158,"react-dom":29}]},{},[159]);
