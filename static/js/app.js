@@ -19031,53 +19031,83 @@ module.exports = validateDOMNesting;
 module.exports = require('./lib/React');
 
 },{"./lib/React":53}],159:[function(require,module,exports){
-"use strict";
+'use strict';
 
-var ReactDOM = require("react-dom");
-var React = require("react");
+var ReactDOM = require('react-dom');
+var React = require('react');
 
 var my_news = [{
-    author: "Саша Печкин",
-    text: "В четчерг, четвертого числа..."
+    author: 'Саша Печкин',
+    text: 'В четчерг, четвертого числа...',
+    bigText: 'в	четыре с четвертью часа четыре чёрненьких чумазеньких чертёнка чертили чёрными чернилами'
 }, {
-    author: "Просто	Вася",
-    text: "Считаю, что $ должен стоить 35 рублей!"
+    author: 'Просто	Вася',
+    text: 'Считаю, что $ должен стоить 35 рублей!',
+    bigText: 'А евро 42!'
 }, {
-    author: "Гость",
-    text: "Бесплатно. Скачать. Лучший сайт - http://localhost:3000"
+    author: 'Гость',
+    text: 'Бесплатно. Скачать. Лучший сайт - http://localhost:3000',
+    bigText: 'На самом деле платно, просто нужно прочитать очень длинное лицензионное соглашение'
 }, {
-    // error, no "author" here, shall be validated in Article
-    text: "Сейчас бы в борт не пробить"
+    author: 'Killa',
+    text: 'Сейчас бы в борт не пробить'
 }];
 
 // Article
 var Article = React.createClass({
-    displayName: "Article",
+    displayName: 'Article',
 
     // Prop Validation
     propTypes: {
         data: React.PropTypes.shape({
             author: React.PropTypes.string.isRequired,
-            text: React.PropTypes.string.isRequired
+            text: React.PropTypes.string.isRequired,
+            bigText: React.PropTypes.string.isRequired
         })
     },
+
+    getInitialState: function getInitialState() {
+        return {
+            visible: false
+        };
+    },
+
+    readmoreClick: function readmoreClick(e) {
+        e.preventDefault();
+        this.setState({ visible: true });
+    },
+
     render: function render() {
         var author = this.props.data.author,
-            text = this.props.data.text;
+            text = this.props.data.text,
+            bigText = this.props.data.bigText,
+            visible = this.state.visible;
 
         return React.createElement(
-            "div",
-            { className: "article" },
+            'div',
+            { className: 'article' },
             React.createElement(
-                "p",
-                { className: "news__author" },
+                'p',
+                { className: 'news__author' },
                 author,
-                ":"
+                ':'
             ),
             React.createElement(
-                "p",
-                { className: "news__text" },
+                'p',
+                { className: 'news__text' },
                 text
+            ),
+            React.createElement(
+                'a',
+                { href: '#',
+                    onClick: this.readmoreClick,
+                    className: 'news__readmore ' + (visible ? 'none' : '') },
+                'Details'
+            ),
+            React.createElement(
+                'p',
+                { className: 'news__big-text ' + (visible ? '' : 'none') },
+                bigText
             )
         );
     }
@@ -19085,7 +19115,7 @@ var Article = React.createClass({
 
 // News
 var News = React.createClass({
-    displayName: "News",
+    displayName: 'News',
 
     // Prop Validation
     propTypes: {
@@ -19098,27 +19128,27 @@ var News = React.createClass({
         if (data.length > 0) {
             newsTemplate = data.map(function (item, index) {
                 return React.createElement(
-                    "div",
+                    'div',
                     { key: index },
                     React.createElement(Article, { data: item })
                 );
             });
         } else {
             newsTemplate = React.createElement(
-                "p",
+                'p',
                 null,
-                "There is no news, unfortunately"
+                'There is no news, unfortunately'
             );
         }
 
         return React.createElement(
-            "div",
-            { className: "news" },
+            'div',
+            { className: 'news' },
             newsTemplate,
             React.createElement(
-                "strong",
+                'strong',
                 { className: 'news__count ' + (data.length > 0 ? '' : 'none') },
-                "Всего новостей: ",
+                'Всего новостей: ',
                 data.length
             )
         );
@@ -19127,23 +19157,23 @@ var News = React.createClass({
 
 // App
 var App = React.createClass({
-    displayName: "App",
+    displayName: 'App',
 
     render: function render() {
         return React.createElement(
-            "div",
-            { className: "app" },
+            'div',
+            { className: 'app' },
             React.createElement(
-                "h3",
+                'h3',
                 null,
-                "Breaking news"
+                'Breaking news'
             ),
             React.createElement(News, { data: my_news }),
-            " "
+            ' '
         );
     }
 });
 
-ReactDOM.render(React.createElement(App, null), document.getElementById("root"));
+ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
 
 },{"react":158,"react-dom":29}]},{},[159]);

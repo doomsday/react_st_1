@@ -1,22 +1,25 @@
-var ReactDOM = require("react-dom");
-var React = require("react");
+var ReactDOM = require('react-dom');
+var React = require('react');
 
 var my_news = [
     {
-        author: "Саша Печкин",
-        text: "В четчерг, четвертого числа..."
+        author: 'Саша Печкин',
+        text: 'В четчерг, четвертого числа...',
+        bigText: 'в	четыре с четвертью часа четыре чёрненьких чумазеньких чертёнка чертили чёрными чернилами'
     },
     {
-        author: "Просто	Вася",
-        text: "Считаю, что $ должен стоить 35 рублей!"
+        author: 'Просто	Вася',
+        text: 'Считаю, что $ должен стоить 35 рублей!',
+        bigText: 'А евро 42!'
     },
     {
-        author: "Гость",
-        text: "Бесплатно. Скачать. Лучший сайт - http://localhost:3000"
+        author: 'Гость',
+        text: 'Бесплатно. Скачать. Лучший сайт - http://localhost:3000',
+        bigText: 'На самом деле платно, просто нужно прочитать очень длинное лицензионное соглашение'
     },
     {
-        // error, no "author" here, shall be validated in Article
-        text: "Сейчас бы в борт не пробить"
+        author: 'Killa',
+        text: 'Сейчас бы в борт не пробить'
     }
 ];
 
@@ -26,17 +29,38 @@ var Article = React.createClass({
     propTypes: {
         data: React.PropTypes.shape({
             author: React.PropTypes.string.isRequired,
-            text: React.PropTypes.string.isRequired
+            text: React.PropTypes.string.isRequired,
+            bigText: React.PropTypes.string.isRequired
         })
     },
+    
+    getInitialState: function() {
+        return {
+            visible: false
+        };
+    },
+    
+    readmoreClick: function(e) {
+        e.preventDefault();
+        this.setState({visible: true});
+    },
+    
     render: function () {
         var author = this.props.data.author,
-        text = this.props.data.text;
+        text = this.props.data.text,
+        bigText = this.props.data.bigText,
+        visible = this.state.visible;
         
         return (
-            <div className="article">
-            <p className="news__author">{author}:</p>
-            <p className="news__text">{text}</p>
+            <div className='article'>
+            <p className='news__author'>{author}:</p>
+            <p className='news__text'>{text}</p>
+            <a href="#"
+            onClick={this.readmoreClick}
+            className={'news__readmore ' + (visible ? 'none' : '')}>
+            Details
+            </a>
+            <p className={'news__big-text ' + (visible ? '' : 'none')}>{bigText}</p>
             </div>
         )
     }
@@ -66,7 +90,7 @@ var News = React.createClass({
         }
 
         return (
-            <div className="news">
+            <div className='news'>
                 {newsTemplate}
                 <strong className = {'news__count ' + (data.length > 0 ? '':'none') }>Всего новостей: {data.length}</strong>
             </div>
@@ -78,7 +102,7 @@ var News = React.createClass({
 var App = React.createClass({
     render: function() {
         return (
-            <div className="app">
+            <div className='app'>
                 <h3>Breaking news</h3>
                 <News data={my_news}/> {/*data property added*/}
             </div>
@@ -88,4 +112,5 @@ var App = React.createClass({
 
 ReactDOM.render(
     <App />,
-    document.getElementById("root"));
+    document.getElementById('root')
+    );
