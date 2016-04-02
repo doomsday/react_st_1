@@ -19050,28 +19050,49 @@ var my_news = [{
     text: "Сейчас бы в борт не пробить"
 }];
 
+// Article
+var Article = React.createClass({
+    displayName: "Article",
+
+    render: function render() {
+        var author = this.props.data.author,
+            text = this.props.data.text;
+
+        return React.createElement(
+            "div",
+            { className: "article" },
+            React.createElement(
+                "p",
+                { className: "news__author" },
+                author,
+                ":"
+            ),
+            React.createElement(
+                "p",
+                { className: "news__text" },
+                text
+            )
+        );
+    }
+});
+
+// News
 var News = React.createClass({
     displayName: "News",
 
+    propTypes: {
+        data: React.PropTypes.array.isRequired
+    },
     render: function render() {
         var data = this.props.data;
         var newsTemplate;
+
         if (data.length > 0) {
             newsTemplate = data.map(function (item, index) {
                 return React.createElement(
                     "div",
                     { key: index },
-                    React.createElement(
-                        "p",
-                        { className: "news_author" },
-                        item.author,
-                        ": "
-                    ),
-                    React.createElement(
-                        "p",
-                        { className: "news_text" },
-                        item.text
-                    )
+                    React.createElement(Article, { data: item })
                 );
             });
         } else {
@@ -19088,14 +19109,15 @@ var News = React.createClass({
             newsTemplate,
             React.createElement(
                 "strong",
-                { className: data.length > 0 ? '' : 'none' },
-                "News total: ",
+                { className: 'news__count ' + (data.length > 0 ? '' : 'none') },
+                "Всего новостей: ",
                 data.length
             )
         );
     }
 });
 
+// App
 var App = React.createClass({
     displayName: "App",
 
@@ -19103,7 +19125,11 @@ var App = React.createClass({
         return React.createElement(
             "div",
             { className: "app" },
-            "Hello, I am App component!I can display some news!.",
+            React.createElement(
+                "h3",
+                null,
+                "Breaking news"
+            ),
             React.createElement(News, { data: my_news }),
             " "
         );

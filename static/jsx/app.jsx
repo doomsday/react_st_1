@@ -20,16 +20,36 @@ var my_news = [
     }
 ];
 
+// Article
+var Article = React.createClass({
+    render: function () {
+        var author = this.props.data.author,
+        text = this.props.data.text;
+        
+        return (
+            <div className="article">
+            <p className="news__author">{author}:</p>
+            <p className="news__text">{text}</p>
+            </div>
+        )
+    }
+});
+
+
+// News
 var News = React.createClass({
+    propTypes: {
+        data: React.PropTypes.array.isRequired
+    },
     render: function() {
         var data = this.props.data;
         var newsTemplate;
+        
         if (data.length > 0) {
             newsTemplate = data.map(function(item, index) {
                 return (
                     <div key={index}>
-                        <p className="news_author">{item.author}: </p>
-                        <p className="news_text">{item.text}</p>
+                    <Article data={item}/>
                     </div>
                 );
             });
@@ -40,19 +60,18 @@ var News = React.createClass({
         return (
             <div className="news">
                 {newsTemplate}
-                <strong className = { data.length > 0 ? '' : 'none' }>
-                    News total: {data.length}
-                </strong>
+                <strong className = {'news__count ' + (data.length > 0 ? '':'none') }>Всего новостей: {data.length}</strong>
             </div>
         );
     }
 });
 
+// App
 var App = React.createClass({
     render: function() {
         return (
             <div className="app">
-                Hello, I am App component!I can display some news!.
+                <h3>Breaking news</h3>
                 <News data={my_news}/> {/*data property added*/}
             </div>
         );
