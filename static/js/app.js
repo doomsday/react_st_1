@@ -19046,7 +19046,7 @@ var my_news = [{
     author: "Гость",
     text: "Бесплатно. Скачать. Лучший сайт - http://localhost:3000"
 }, {
-    author: "Килла",
+    // error, no "author" here, shall be validated in Article
     text: "Сейчас бы в борт не пробить"
 }];
 
@@ -19054,6 +19054,13 @@ var my_news = [{
 var Article = React.createClass({
     displayName: "Article",
 
+    // Prop Validation
+    propTypes: {
+        data: React.PropTypes.shape({
+            author: React.PropTypes.string.isRequired,
+            text: React.PropTypes.string.isRequired
+        })
+    },
     render: function render() {
         var author = this.props.data.author,
             text = this.props.data.text;
@@ -19080,6 +19087,7 @@ var Article = React.createClass({
 var News = React.createClass({
     displayName: "News",
 
+    // Prop Validation
     propTypes: {
         data: React.PropTypes.array.isRequired
     },
