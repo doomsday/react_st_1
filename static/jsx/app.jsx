@@ -66,13 +66,22 @@ var Article = React.createClass({
     }
 });
 
-
 // News
 var News = React.createClass({
     // Prop Validation
     propTypes: {
         data: React.PropTypes.array.isRequired
     },
+    getInitialState: function() {
+        return {
+            counter: 0
+        }
+    },
+    
+    onTotalNewsClick: function() {
+        this.setState({counter: ++this.state.counter});
+    },
+    
     render: function() {
         var data = this.props.data;
         var newsTemplate;
@@ -92,7 +101,11 @@ var News = React.createClass({
         return (
             <div className='news'>
                 {newsTemplate}
-                <strong className = {'news__count ' + (data.length > 0 ? '':'none') }>Всего новостей: {data.length}</strong>
+                <strong
+                className = {'news__count ' + (data.length > 0 ? '':'none') }
+                onClick={this.onTotalNewsClick}>
+                Всего новостей: {data.length}
+                </strong>
             </div>
         );
     }
