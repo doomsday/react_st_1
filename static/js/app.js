@@ -19057,6 +19057,7 @@ var my_news = [{
 var Article = React.createClass({
     displayName: 'Article',
 
+
     // Prop Validation
     propTypes: {
         data: React.PropTypes.shape({
@@ -19090,7 +19091,7 @@ var Article = React.createClass({
                 'p',
                 { className: 'news__author' },
                 author,
-                ':'
+                ': '
             ),
             React.createElement(
                 'p',
@@ -19121,6 +19122,12 @@ var News = React.createClass({
     propTypes: {
         data: React.PropTypes.array.isRequired
     },
+    getInitialState: function getInitialState() {
+        return {
+            counter: 0
+        };
+    },
+
     render: function render() {
         var data = this.props.data;
         var newsTemplate;
@@ -19147,9 +19154,47 @@ var News = React.createClass({
             newsTemplate,
             React.createElement(
                 'strong',
-                { className: 'news__count ' + (data.length > 0 ? '' : 'none') },
+                {
+                    className: 'news__count ' + (data.length > 0 ? '' : 'none') },
                 'Всего новостей: ',
                 data.length
+            )
+        );
+    }
+});
+
+// Test Input
+var TestInput = React.createClass({
+    displayName: 'TestInput',
+
+    getInitialState: function getInitialState() {
+        return {
+            myValue: ''
+        };
+    },
+
+    onChangeHandler: function onChangeHandler(e) {
+        this.setState({ myValue: e.target.value });
+    },
+
+    onBtnClickHandler: function onBtnClickHandler() {
+        alert(this.state.value);
+    },
+
+    render: function render() {
+        return React.createElement(
+            'div',
+            null,
+            React.createElement('input', {
+                className: 'test-input',
+                value: this.state.myValue,
+                onChange: this.onChangeHandler,
+                placeholder: 'enter value'
+            }),
+            React.createElement(
+                'button',
+                { onClick: this.onBtnClickHandler },
+                'Show Alert'
             )
         );
     }
@@ -19168,8 +19213,8 @@ var App = React.createClass({
                 null,
                 'Breaking news'
             ),
-            React.createElement(News, { data: my_news }),
-            ' '
+            React.createElement(TestInput, null),
+            React.createElement(News, { data: my_news })
         );
     }
 });

@@ -25,6 +25,7 @@ var my_news = [
 
 // Article
 var Article = React.createClass({
+
     // Prop Validation
     propTypes: {
         data: React.PropTypes.shape({
@@ -33,34 +34,34 @@ var Article = React.createClass({
             bigText: React.PropTypes.string.isRequired
         })
     },
-    
+
     getInitialState: function() {
         return {
             visible: false
         };
     },
-    
+
     readmoreClick: function(e) {
         e.preventDefault();
-        this.setState({visible: true});
+        this.setState({ visible: true });
     },
-    
-    render: function () {
+
+    render: function() {
         var author = this.props.data.author,
-        text = this.props.data.text,
-        bigText = this.props.data.bigText,
-        visible = this.state.visible;
-        
+            text = this.props.data.text,
+            bigText = this.props.data.bigText,
+            visible = this.state.visible;
+
         return (
             <div className='article'>
-            <p className='news__author'>{author}:</p>
-            <p className='news__text'>{text}</p>
-            <a href="#"
-            onClick={this.readmoreClick}
-            className={'news__readmore ' + (visible ? 'none' : '')}>
-            Details
-            </a>
-            <p className={'news__big-text ' + (visible ? '' : 'none')}>{bigText}</p>
+                <p className='news__author'>{author}: </p>
+                <p className='news__text'>{text}</p>
+                <a href="#"
+                    onClick={this.readmoreClick}
+                    className={'news__readmore ' + (visible ? 'none' : '') }>
+                    Details
+                </a>
+                <p className={'news__big-text ' + (visible ? '' : 'none') }>{bigText}</p>
             </div>
         )
     }
@@ -77,20 +78,16 @@ var News = React.createClass({
             counter: 0
         }
     },
-    
-    onTotalNewsClick: function() {
-        this.setState({counter: ++this.state.counter});
-    },
-    
+
     render: function() {
         var data = this.props.data;
         var newsTemplate;
-        
+
         if (data.length > 0) {
             newsTemplate = data.map(function(item, index) {
                 return (
                     <div key={index}>
-                    <Article data={item}/>
+                        <Article data={item}/>
                     </div>
                 );
             });
@@ -102,10 +99,40 @@ var News = React.createClass({
             <div className='news'>
                 {newsTemplate}
                 <strong
-                className = {'news__count ' + (data.length > 0 ? '':'none') }
-                onClick={this.onTotalNewsClick}>
-                Всего новостей: {data.length}
+                    className = {'news__count ' + (data.length > 0 ? '' : 'none') }>
+                    Всего новостей: {data.length}
                 </strong>
+            </div>
+        );
+    }
+});
+
+// Test Input
+var TestInput = React.createClass({
+    getInitialState: function() {
+        return {
+            myValue: ''
+        };
+    },
+
+    onChangeHandler: function(e) {
+        this.setState({ myValue: e.target.value })
+    },
+
+    onBtnClickHandler: function() {
+        alert(this.state.value); 
+    },
+
+    render: function() {
+        return (
+            <div>
+                <input
+                    className='test-input'
+                    value={this.state.myValue}
+                    onChange={this.onChangeHandler}
+                    placeholder='enter value'
+                    />
+                <button onClick={this.onBtnClickHandler}>Show Alert</button>
             </div>
         );
     }
@@ -117,7 +144,8 @@ var App = React.createClass({
         return (
             <div className='app'>
                 <h3>Breaking news</h3>
-                <News data={my_news}/> {/*data property added*/}
+                <TestInput />
+                <News data={my_news}/>
             </div>
         );
     }
@@ -126,4 +154,4 @@ var App = React.createClass({
 ReactDOM.render(
     <App />,
     document.getElementById('root')
-    );
+);
