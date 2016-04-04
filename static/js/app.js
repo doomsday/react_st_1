@@ -19167,33 +19167,19 @@ var News = React.createClass({
 var TestInput = React.createClass({
     displayName: 'TestInput',
 
-    /**
-     * Invoked once before the component is mounted. The return value will be
-     * used as the initial value of this.state
-     */
-    getInitialState: function getInitialState() {
-        return {
-            myValue: ''
-        };
-    },
 
-    onChangeHandler: function onChangeHandler(event) {
-        /**
-         * A common way to inform React of a data change is by calling 
-         * setState(data, callback). This method merges data into this.state
-         * and re-renders the component. When the component finishes
-         * re-rendering, the optional callback is called
-         */
-        this.setState({ myValue: event.target.value });
+    componentDidMount: function componentDidMount() {
+        ReactDOM.findDOMNode(this.refs.myTestInput).focus();
     },
 
     onBtnClickHandler: function onBtnClickHandler() {
-        alert(this.state.value);
+        alert(ReactDOM.findDOMNode(this.refs.myTestInput).value);
     },
 
     /**
-     * onChange prop works across browsers to fire in response to user
-     * interactions when value of <input> or <textarea> changes
+     * Refs and findDOMNode()
+     * You can attach a "ref"" to any element, which allows you to reference the
+     * backing instance of the component
      */
     render: function render() {
         return React.createElement(
@@ -19202,9 +19188,9 @@ var TestInput = React.createClass({
             React.createElement('input', {
                 className: 'test-input',
                 type: 'text',
-                value: this.state.myValue,
-                onChange: this.onChangeHandler,
-                placeholder: 'enter value'
+                defaultValue: '',
+                placeholder: 'enter value',
+                ref: 'myTestInput'
             }),
             React.createElement(
                 'button',
