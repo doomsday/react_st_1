@@ -109,25 +109,40 @@ var News = React.createClass({
 
 // Test Input
 var TestInput = React.createClass({
+    /**
+     * Invoked once before the component is mounted. The return value will be
+     * used as the initial value of this.state
+     */
     getInitialState: function() {
         return {
             myValue: ''
         };
     },
 
-    onChangeHandler: function(e) {
-        this.setState({ myValue: e.target.value })
+    onChangeHandler: function(event) {
+        /**
+         * A common way to inform React of a data change is by calling 
+         * setState(data, callback). This method merges data into this.state
+         * and re-renders the component. When the component finishes
+         * re-rendering, the optional callback is called
+         */
+        this.setState({ myValue: event.target.value })
     },
 
     onBtnClickHandler: function() {
         alert(this.state.value); 
     },
 
+    /**
+     * onChange prop works across browsers to fire in response to user
+     * interactions when value of <input> or <textarea> changes
+     */
     render: function() {
         return (
             <div>
                 <input
                     className='test-input'
+                    type="text"
                     value={this.state.myValue}
                     onChange={this.onChangeHandler}
                     placeholder='enter value'
