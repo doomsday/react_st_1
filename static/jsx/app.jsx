@@ -173,12 +173,14 @@ var Add = React.createClass({
                     defaultValue=''
                     placeholder='Your name'
                     ref='author'
+                    onChange={this.onAuthorChange}
                     />
                 <textarea
                     className='add__text'
                     defaultValue=''
                     placeholder='News text'
                     ref='text'
+                    onChange={this.onTextChange}
                     ></textarea>
                 <label className='add__checkrule'>
                     <input

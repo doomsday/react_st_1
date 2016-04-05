@@ -19231,13 +19231,15 @@ var Add = React.createClass({
                 type: 'text',
                 defaultValue: '',
                 placeholder: 'Your name',
-                ref: 'author'
+                ref: 'author',
+                onChange: this.onAuthorChange
             }),
             React.createElement('textarea', {
                 className: 'add__text',
                 defaultValue: '',
                 placeholder: 'News text',
-                ref: 'text'
+                ref: 'text',
+                onChange: this.onTextChange
             }),
             React.createElement(
                 'label',
