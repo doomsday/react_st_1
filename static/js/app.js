@@ -19174,7 +19174,9 @@ var Add = React.createClass({
      */
     getInitialState: function getInitialState() {
         return {
-            btnIsDisabled: true
+            agreeNotChecked: true,
+            authorIsEmpty: true,
+            textIsEmpty: true
         };
     },
 
@@ -19186,7 +19188,7 @@ var Add = React.createClass({
     },
 
     onCheckRuleClick: function onCheckRuleClick() {
-        this.setState({ btnIsDisabled: !this.state.btnIsDisabled });
+        this.setState({ agreeNotChecked: !this.state.agreeNotChecked });
     },
 
     onBtnClickHandler: function onBtnClickHandler(e) {
@@ -19196,17 +19198,36 @@ var Add = React.createClass({
         alert(author + '\n' + text);
     },
 
+    onAuthorChange: function onAuthorChange(e) {
+        if (e.target.value.trim().length > 0) {
+            this.setState({ authorIsEmpty: false });
+        } else {
+            this.setState({ authorIsEmpty: true });
+        }
+    },
+
+    onTextChange: function onTextChange(e) {
+        if (e.target.value.trim().length > 0) {
+            this.setState({ textIsEmpty: false });
+        } else {
+            this.setState({ textIsEmpty: true });
+        }
+    },
+
     /**
      * Refs and findDOMNode()
      * You can attach a "ref"" to any element, which allows you to reference the
      * backing instance of the component
      */
     render: function render() {
+        var agreeNotChecked = this.state.agreeNotChecked,
+            authorIsEmpty = this.state.authorIsEmpty,
+            textIsEmpty = this.state.textIsEmpty;
         return React.createElement(
             'form',
             { className: 'add cf' },
             React.createElement('input', {
-                className: 'add_author',
+                className: 'add__author',
                 type: 'text',
                 defaultValue: '',
                 placeholder: 'Your name',
@@ -19224,7 +19245,8 @@ var Add = React.createClass({
                 React.createElement('input', {
                     type: 'checkbox',
                     onClick: this.onCheckRuleClick,
-                    ref: 'checkrule' }),
+                    ref: 'checkrule'
+                }),
                 'I agree with the rules'
             ),
             React.createElement(
@@ -19233,7 +19255,7 @@ var Add = React.createClass({
                     className: 'add__btn',
                     onClick: this.onBtnClickHandler,
                     ref: 'alert__button',
-                    disabled: this.state.btnIsDisabled
+                    disabled: agreeNotChecked || authorIsEmpty || textIsEmpty
                 },
                 'Show alert'
             )
