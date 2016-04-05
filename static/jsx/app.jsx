@@ -108,14 +108,34 @@ var News = React.createClass({
 });
 
 // Test Input
-var TestInput = React.createClass({
-    
-    componentDidMount: function() {
-        ReactDOM.findDOMNode(this.refs.myTestInput).focus();
+var Add = React.createClass({
+
+    /**
+     * Invoked once before the component is mounted. The return value will be
+     * used as the initial value of this.state
+     */
+    getInitialState: function() {
+        return {
+            btnIsDisabled: true
+        };
     },
 
-    onBtnClickHandler: function() {
-        alert(ReactDOM.findDOMNode(this.refs.myTestInput).value);
+    /**
+     * Invoked immediately before mounting occurs
+     */
+    componentDidMount: function() {
+        ReactDOM.findDOMNode(this.refs.author).focus();
+    },
+
+    onCheckRuleClick: function() {
+        this.setState({ btnIsDisabled: !this.state.btnIsDisabled });
+    },
+
+    onBtnClickHandler: function(e) {
+        e.preventDefault();
+        var author = ReactDOM.findDOMNode(this.refs.author).value;
+        var text = ReactDOM.findDOMNode(this.refs.text).value;
+        alert(author + '\n' + text);
     },
 
     /**
@@ -125,16 +145,36 @@ var TestInput = React.createClass({
      */
     render: function() {
         return (
-            <div>
+            <form className='add cf'>
                 <input
-                    className='test-input'
+                    className='add_author'
                     type="text"
                     defaultValue=''
-                    placeholder='enter value'
-                    ref='myTestInput'
+                    placeholder='Your name'
+                    ref='author'
                     />
-                <button onClick={this.onBtnClickHandler}>Show Alert</button>
-            </div>
+                <textarea
+                    className='add__text'
+                    defaultValue=''
+                    placeholder='News text'
+                    ref='text'
+                    ></textarea>
+                <label className='add__checkrule'>
+                    <input
+                        type='checkbox'
+                        onClick={this.onCheckRuleClick}
+                        ref='checkrule'/>
+                    I agree with the rules
+                </label>
+                <button
+                    className='add__btn'
+                    onClick={this.onBtnClickHandler}
+                    ref='alert__button'
+                    disabled={this.state.btnIsDisabled}
+                    >
+                    Show alert
+                </button>
+            </form>
         );
     }
 });
@@ -145,7 +185,7 @@ var App = React.createClass({
         return (
             <div className='app'>
                 <h3>Breaking news</h3>
-                <TestInput />
+                <Add />
                 <News data={my_news}/>
             </div>
         );

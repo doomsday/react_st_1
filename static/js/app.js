@@ -19164,16 +19164,36 @@ var News = React.createClass({
 });
 
 // Test Input
-var TestInput = React.createClass({
-    displayName: 'TestInput',
+var Add = React.createClass({
+    displayName: 'Add',
 
 
-    componentDidMount: function componentDidMount() {
-        ReactDOM.findDOMNode(this.refs.myTestInput).focus();
+    /**
+     * Invoked once before the component is mounted. The return value will be
+     * used as the initial value of this.state
+     */
+    getInitialState: function getInitialState() {
+        return {
+            btnIsDisabled: true
+        };
     },
 
-    onBtnClickHandler: function onBtnClickHandler() {
-        alert(ReactDOM.findDOMNode(this.refs.myTestInput).value);
+    /**
+     * Invoked immediately before mounting occurs
+     */
+    componentDidMount: function componentDidMount() {
+        ReactDOM.findDOMNode(this.refs.author).focus();
+    },
+
+    onCheckRuleClick: function onCheckRuleClick() {
+        this.setState({ btnIsDisabled: !this.state.btnIsDisabled });
+    },
+
+    onBtnClickHandler: function onBtnClickHandler(e) {
+        e.preventDefault();
+        var author = ReactDOM.findDOMNode(this.refs.author).value;
+        var text = ReactDOM.findDOMNode(this.refs.text).value;
+        alert(author + '\n' + text);
     },
 
     /**
@@ -19183,19 +19203,39 @@ var TestInput = React.createClass({
      */
     render: function render() {
         return React.createElement(
-            'div',
-            null,
+            'form',
+            { className: 'add cf' },
             React.createElement('input', {
-                className: 'test-input',
+                className: 'add_author',
                 type: 'text',
                 defaultValue: '',
-                placeholder: 'enter value',
-                ref: 'myTestInput'
+                placeholder: 'Your name',
+                ref: 'author'
+            }),
+            React.createElement('textarea', {
+                className: 'add__text',
+                defaultValue: '',
+                placeholder: 'News text',
+                ref: 'text'
             }),
             React.createElement(
+                'label',
+                { className: 'add__checkrule' },
+                React.createElement('input', {
+                    type: 'checkbox',
+                    onClick: this.onCheckRuleClick,
+                    ref: 'checkrule' }),
+                'I agree with the rules'
+            ),
+            React.createElement(
                 'button',
-                { onClick: this.onBtnClickHandler },
-                'Show Alert'
+                {
+                    className: 'add__btn',
+                    onClick: this.onBtnClickHandler,
+                    ref: 'alert__button',
+                    disabled: this.state.btnIsDisabled
+                },
+                'Show alert'
             )
         );
     }
@@ -19214,7 +19254,7 @@ var App = React.createClass({
                 null,
                 'Breaking news'
             ),
-            React.createElement(TestInput, null),
+            React.createElement(Add, null),
             React.createElement(News, { data: my_news })
         );
     }
