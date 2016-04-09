@@ -24,7 +24,8 @@
     "express": "^4.13.4",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
-    "watchify": "^3.7.0"
+    "watchify": "^3.7.0",
+    "wolfy87-eventemitter": "^4.3.0"
   },
   "scripts": {
     "build-js": "browserify static/jsx/app.jsx -t babelify -o static/js/app.js",

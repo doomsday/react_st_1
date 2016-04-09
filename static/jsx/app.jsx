@@ -1,5 +1,7 @@
 var ReactDOM = require('react-dom');
 var React = require('react');
+var EventEmitter = require('wolfy87-eventemitter');
+window.ee = new EventEmitter();
 
 var my_news = [
     {
@@ -19,7 +21,8 @@ var my_news = [
     },
     {
         author: 'Killa',
-        text: 'Сейчас бы в борт не пробить'
+        text: 'Сейчас бы в борт не пробить',
+        bigText: 'Everything is fine, just shut up'
     }
 ];
 
@@ -41,8 +44,8 @@ var Article = React.createClass({
         };
     },
 
-    readmoreClick: function(e) {
-        e.preventDefault();
+    readmoreClick: function(event) {
+        event.preventDefault();
         this.setState({ visible: true });
     },
 
@@ -73,6 +76,7 @@ var News = React.createClass({
     propTypes: {
         data: React.PropTypes.array.isRequired
     },
+    
     getInitialState: function() {
         return {
             counter: 0
@@ -84,6 +88,10 @@ var News = React.createClass({
         var newsTemplate;
 
         if (data.length > 0) {
+            /**
+             * The map() method creates a new array with the results of calling
+             * a provided function on every element in this array
+             */
             newsTemplate = data.map(function(item, index) {
                 return (
                     <div key={index}>
@@ -133,26 +141,30 @@ var Add = React.createClass({
         this.setState({ agreeNotChecked: !this.state.agreeNotChecked });
     },
 
-    onBtnClickHandler: function(e) {
-        e.preventDefault();
+    onBtnClickHandler: function(event) {
+        event.preventDefault();
+        var textEl = ReactDOM.findDOMNode(this.refs.text);
+        
         var author = ReactDOM.findDOMNode(this.refs.author).value;
         var text = ReactDOM.findDOMNode(this.refs.text).value;
-        alert(author + '\n' + text);
+        
+        var item = [{
+            author: author,
+            text: text,
+            bigText: '...'
+        }];
+        
+        window.ee.emit('News.add', item);
+        
+        textEl.value = '';
+        this.setState({textIsEmpty: true});
     },
 
-    onAuthorChange: function(e) {
-        if (e.target.value.trim().length > 0) {
-            this.setState({ authorIsEmpty: false })
+    onFieldChange: function(fieldName, event) {
+        if (event.target.value.trim().length > 0) {
+            this.setState({ ['' + fieldName]: false })
         } else {
-            this.setState({ authorIsEmpty: true })
-        }
-    },
-
-    onTextChange: function(e) {
-        if (e.target.value.trim().length > 0) {
-            this.setState({ textIsEmpty: false })
-        } else {
-            this.setState({ textIsEmpty: true })
+            this.setState({ ['' + fieldName]: true })
         }
     },
 
@@ -173,14 +185,14 @@ var Add = React.createClass({
                     defaultValue=''
                     placeholder='Your name'
                     ref='author'
-                    onChange={this.onAuthorChange}
+                    onChange={this.onFieldChange.bind(this, 'authorIsEmpty') }
                     />
                 <textarea
                     className='add__text'
                     defaultValue=''
                     placeholder='News text'
                     ref='text'
-                    onChange={this.onTextChange}
+                    onChange={this.onFieldChange.bind(this, 'textIsEmpty') }
                     ></textarea>
                 <label className='add__checkrule'>
                     <input
@@ -196,7 +208,7 @@ var Add = React.createClass({
                     ref='alert__button'
                     disabled={agreeNotChecked || authorIsEmpty || textIsEmpty }
                     >
-                    Show alert
+                    Add news
                 </button>
             </form>
         );
@@ -205,12 +217,38 @@ var Add = React.createClass({
 
 // App
 var App = React.createClass({
+    getInitialState: function() {
+        return {
+            news: my_news
+        };
+    },
+    
+    /**
+     * Invoked once, only on the client (not on the server), immediately after
+     * the initial rendering occurs. At this point in the lifecycle, you can 
+     * access any refs to your children
+     */
+    componentDidMount: function() {
+        var self = this;
+        window.ee.addListener('News.add', function(item) {
+            var nextNews = item.concat(self.state.news);
+            self.setState({news: nextNews});
+        });
+    },
+    
+    /**
+     * Invoked immediately before a component is unmounted from the DOM
+     */
+    componentWillUnmount: function() {
+        window.ee.removeListener('News.add');
+    },
+    
     render: function() {
         return (
             <div className='app'>
                 <h3>Breaking news</h3>
                 <Add />
-                <News data={my_news}/>
+                <News data={this.state.news}/>
             </div>
         );
     }
